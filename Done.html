@@ -14,18 +14,35 @@
         var imgLink = url.searchParams.get("winnerID");
         var subject = url.searchParams.get("subject");
         const jsonLocation = 'data/' + subject + '.json';
-        var httpRequest = new XMLHttpRequest();
+        var httpRequest1 = new XMLHttpRequest();
+        var httpRequest2 = new XMLHttpRequest();
+        let Rank = [];
 
         $.getJSON(jsonLocation, function (data) {
-            httpRequest.open("GET", "/changeJson?"+ "subject=" +subject + "&" + "winnerID=" + imgLink, true);
-            httpRequest.send();
+            httpRequest1.open("GET", "/changeJson?" + "subject=" + subject + "&" + "winnerID=" + imgLink, true);
+            httpRequest1.send();
+            httpRequest2.open("GET", "/getRank?" + "subject=" + subject, true);
+            httpRequest2.onload = function () {
+                var rankJson = httpRequest2.response;
+                var rank = JSON.parse(rankJson);
+                for (var i = 0; i < 3; i++) {
+                    Rank.push(rank[i].src);
+                }
+                $('#one').append(`<img id="no1" src="${Rank[0]}"/>`);
+                $('#two').append(`<img id="no2" src="${Rank[1]}"/>`);
+                $('#three').append(`<img id="no3" src="${Rank[2]}"/>`);
+            };
+            httpRequest2.send();
+
             $('#winnerImg').append(`<img id ="win" src="${imgLink}"/>`);
             data.sort(function (a, b) {
                 return a.cnt > b.cnt ? -1 : 0;
-            });
-            $('#one').append(`<img id="no1" src="${data[0].src}"/>`);
-            $('#two').append(`<img id="no2" src="${data[1].src}"/>`);
-            $('#three').append(`<img id="no3" src="${data[2].src}"/>`);
+            })
+            console.log(Rank);
+
+            //$('#one').append(`<img id="no1" src="${data[0].src}"/>`);
+            //$('#two').append(`<img id="no2" src="${data[1].src}"/>`);
+            //$('#three').append(`<img id="no3" src="${data[2].src}"/>`);
         });
     </script>
 </head>
