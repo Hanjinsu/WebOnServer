@@ -19,7 +19,7 @@ var imgSchema = new mongoose.Schema({
 const Img = mongoose.model('Img',imgSchema);
 
 
-app.get('/', function (req, res) {
+app.get('/', function (req, res) {git
 	res.send('Hello World!');
 });
 
